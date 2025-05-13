@@ -9,7 +9,7 @@ function UserCard({ title, value, color, icon }) {
   };
 
   return (
-    <div className={`p-4 mr-8 ml-4 h-20 w-70 rounded-lg shadow-md bg-[#14133c] relative`}>
+    <div className={`p-4 mr-10 ml-8 h-20 w-65 rounded-lg shadow-md bg-[#14133c] relative border border-gray-600`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className={`text-3xl p-2 rounded-full ${colorMap[color]} text-white`}>

@@ -8,6 +8,7 @@ export default function UserTable() {
   const [editedUser, setEditedUser] = useState({});
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const handleDelete = (index) => {
     const updatedUsers = users.filter((_, i) => i !== index);
@@ -26,11 +27,36 @@ export default function UserTable() {
     setEditingIndex(null);
   };
 
+  const handleNextPage = () => {
+    if ((currentPage + 1) * rowsPerPage < usersData.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const paginatedUsers = usersData.slice(
+    currentPage * rowsPerPage,
+    (currentPage + 1) * rowsPerPage
+  );
+
   return (
-    <div className="bg-[#14133c] mr-8 ml-4 rounded-lg border border-gray-600">
-      <div className="text-white text-lg font-bold mb-4 ml-4 mt-4">All Users</div>
+    <div className="bg-[#14133c] mr-10 ml-8 rounded-lg border border-gray-600">
+      <div className="text-white text-lg font-bold mb-4 ml-4 mt-4 flex justify-between items-center">
+        <span>All Users</span>
+        <button
+          onClick={() => setShowAddUserModal(true)}
+          className="bg-blue-600 text-white py-1 px-4 mr-4 rounded hover:bg-blue-700"
+        >
+          Add User
+        </button>
+      </div>
       <hr className="border-t border-gray-600 mb-4" />
-      <table className="w-full text-sm ml-4">
+      <table className="w-315 text-sm ml-4">
         <thead>
           <tr className="text-left text-md bg-[#14133c] text-white">
            <th className="p-3 pl-10">
@@ -64,7 +90,7 @@ export default function UserTable() {
   </span>
 </th>
 <th className="p-3">
-  <span className="flex items-center gap-1">
+  <span className="flex items-center ml-7 gap-1">
     <FaTools />
     Actions
   </span>
@@ -73,7 +99,7 @@ export default function UserTable() {
           </tr>
         </thead>
         <tbody>
-          {users.map((u, i) => (
+          {paginatedUsers.map((u, i) => (
             <tr
               key={i}
               className={
@@ -182,7 +208,7 @@ export default function UserTable() {
                 ) : (
                   <button
                     onClick={() => handleEdit(i)}
-                    className="text-blue-400 hover:text-blue-600"
+                    className="text-blue-400 hover:text-blue-600 ml-7"
                   >
                     <FaPencilAlt />
                   </button>
@@ -198,8 +224,8 @@ export default function UserTable() {
           ))}
         </tbody>
       </table>
-      <div className="mt-4 text-white ml-5 text-sm flex justify-between items-center">
-        <span>1-10 of 460 pages</span>
+      <div className="mt-4 text-white mb-6 ml-5 text-sm flex justify-between items-center">
+        <span>1-10 of 460</span>
         <div className="flex items-center space-x-2">
           <span>Rows per page:</span>
           <select
@@ -212,19 +238,22 @@ export default function UserTable() {
               </option>
             ))}
           </select>
-          <button className="text-gray-400 hover:text-white text-xl mr-3 font-bold">←</button>
-          <button className="text-gray-400 hover:text-white text-xl mr-10 font-bold">→</button>
+          <button
+            onClick={handlePreviousPage}
+            className="text-gray-400 hover:text-white text-xl mr-3 font-bold"
+          >
+            ←
+          </button>
+          <button
+            onClick={handleNextPage}
+            className="text-gray-400 hover:text-white text-xl mr-15 font-bold"
+          >
+            →
+          </button>
         </div>
       </div>
       
-      <div className="mt-6 ml-5">
-        <button
-          onClick={() => setShowAddUserModal(true)}
-          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-        >
-          Add User
-        </button>
-      </div>
+      
 
       {showAddUserModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
